@@ -18,6 +18,9 @@ Feel free to fork and modify.
 - C# .NET4.5, VisualStudio 12 (ult.2013)
 - OpenGL via OpenTK (find dlls in bin/Debug)
 
+## Download
+- from author server: http://thrill-project.com/archiv/coding/Zwerg.zip (754kb)
+
 ## Features
 - distance functions (primitives)
 - distance operations
