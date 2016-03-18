@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<nodes>
+  
+  <!-- DISTANCE OBJECTS -->
+  <node type="do" name="cube" caption="Cube" code="sdBox({A}-vec3({0}),vec3({1}))">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="size" type="vec3" default="0.2,0.2,0.2" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="sphere" caption="Sphere" code="sdSphere({A}-vec3({0}),{1})">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="radius" type="float" default="0.4" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="cylinder" caption="Cylinder" code="sdCappedCylinder({A}-vec3({0}), vec2({1}))">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="size" type="vec2" default="0.2,0.5" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="torus" caption="Torus" code="sdTorus({A}-vec3({0}), vec2({1}))">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="size" type="vec2" default="0.5,0.15" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="capsule" caption="Capsule" code="sdCapsule({A}-vec3({0}), vec3({1}), vec3({2}), {3})">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="A" type="vec3" default="0.5,0.0,0.0" />
+    <prop name="B" type="vec3" default="-0.5,0.0,0.0" />
+    <prop name="radius" type="float" default="0.2" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="hexprism" caption="Hex Prism" code="sdHexPrism({A}-vec3({0}),vec2({1},{2}))">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="radius" type="float" default="0.5" />
+    <prop name="height" type="float" default="0.1" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="triprism" caption="Tri Prism" code="sdTriPrism({A}-vec3({0}), vec2({1}))">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="size" type="vec2" default="0.4,0.2" />
+    <prop name="color" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="do" name="plane" caption="Plane" code="sdPlane({A}-vec3({0}),vec4({1}))">
+    <prop name="position" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="orientation" type="vec4" default="0.0,1.0,0.0,0.1" />
+    <prop name="color" type="vec3" default="0.3,0.3,0.3" />
+  </node>
+
+  <!-- DISTANCE OPERATIONS/DEFORMATION -->
+  <node type="distop" name="union" caption="Union" code="opU({0},{1})" />
+  <node type="distop" name="subtraction" caption="Subtraction" code="opS({0},{1})" />
+  <node type="distop" name="intersection" caption="Intersection" code="opI({0},{1})" />
+  
+  <node type="distop" name="blend" caption="Blend" code="smin({0},{1},{2})">
+    <prop name="distance1" type="float" default="{0}" />
+    <prop name="distance2" type="float" default="{1}" />
+    <prop name="blend" type="float" default="0.1" />
+  </node>
+
+  <!-- DOMAIN OPERATIONS -->
+  <node type="domop" name="repetition-x" caption="Repetition X" code="vec3 {B}=vec3(mod({A}.x,{0})-0.5*{0},{A}.y,{A}.z)" >
+    <prop name="period" type="float" default="1.0" />  
+  </node>
+  <node type="domop" name="repetition-y" caption="Repetition Y" code="vec3 {B}=vec3({A}.x,mod({A}.y,{0})-0.5*{0},{A}.z)">
+    <prop name="period" type="float" default="1.0" />
+  </node>
+  <node type="domop" name="repetition-z" caption="Repetition Z" code="vec3 {B}=vec3({A}.x,{A}.y, mod({A}.z,{0})-0.5*{0})">
+    <prop name="period" type="float" default="1.0" />
+  </node>
+  <node type="domop" name="repetition" caption="Repetition XYZ" code="vec3 {B}=opRep({A}-vec3({0}),vec3({1}))">
+    <prop name="shift" type="vec3" default="0.0,0.0,0.0" />
+    <prop name="period" type="vec3" default="1.0,1.0,1.0" />
+  </node>
+  <node type="domop" name="circular" caption="Circular Y" code="vec3 {B}=vec3(atan({A}.z,{A}.x)*{0}/pi2,{A}.y,length({A}.xz))">
+    <prop name="period" type="float" default="5.0" />
+  </node>
+  <node type="domop" name="rotation-y" caption="Rotation Y" code="vec3 {B}=rY({A},{0})">
+    <prop name="radian" type="float" default="0.7854" />
+  </node>
+
+</nodes>
