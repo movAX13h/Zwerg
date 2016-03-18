@@ -1,5 +1,10 @@
 # Zwerg - Distance Field Editor
- by movAX13h (filip.sound@gmail.com, blog.thrill-project.com)
+
+by movAX13h (filip.sound@gmail.com)
+
+http://blog.thrill-project.com/zwerg-distance-field-editor/
+
+![ScreenShot](http://blog.thrill-project.com/wp-content/uploads/2014/10/screenshot.png)
 
 Feel free to fork and modify.
 
