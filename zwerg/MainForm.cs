@@ -44,7 +44,7 @@ namespace Zwerg
         private bool mouseMoved = false;
         private float mouseWheelDelta = 0;
 
-        List<Keys> keys;
+        private List<Keys> keys;
 
         private float time = 0;
 
@@ -58,7 +58,7 @@ namespace Zwerg
         private PropertiesPanel propertiesPanel;
 
         private string nodesXmlPath = "nodes.xml";
-        private string shaderPath = "raymarcher.fs";
+        private string shaderPath = "shader.fs";
         private string shaderSource = "";
 
         private ToolStripMenuItem deleteItem;
@@ -77,17 +77,18 @@ namespace Zwerg
 
             Text = "Zwerg " + Application.ProductVersion.Substring(0, 3) + " - Distance Field Editor by movAX13h";
 
-            usageLabel.Text = "Use right mouse button context menu of the scene panel to add and remove nodes." + Environment.NewLine + Environment.NewLine;
-            usageLabel.Text += "Click the 'Apply changes' button or press ENTER to update the preview at any time." + Environment.NewLine + Environment.NewLine;
-            usageLabel.Text += "Use the wasd-keys or move your mouse while holding the left button to rotate the camera around the selected object." + Environment.NewLine + Environment.NewLine;
-            usageLabel.Text += "In free fly mode use the wasd-keys to move the camera and left mouse button drag to look around." + Environment.NewLine + Environment.NewLine;
-            usageLabel.Text += "A simple mouse click on a distance object in the preview selects the node in the scene view." + Environment.NewLine + Environment.NewLine;
-            usageLabel.Text += "Mouse wheel increases/decreases the distance to the target." + Environment.NewLine + Environment.NewLine;
-            usageLabel.Text += "Right mouse button controls light direction (rotates around y-axis).";
+            string nl = Environment.NewLine + Environment.NewLine;
+            usageLabel.Text = "Use right mouse button context menu of the scene panel to add and remove nodes." + nl
+                            + "Click the 'Apply changes' button or press ENTER to update the preview at any time." + nl
+                            + "Use the wasd-keys or move your mouse while holding the left button to rotate the camera around the selected object." + nl
+                            + "In free fly mode use the wasd-keys to move the camera and left mouse button drag to look around." + nl
+                            + "Mouse wheel increases/decreases the distance to the target." + nl
+                            + "A mouse click on a distance object in the preview selects the node in the scene view (experimental)." + nl
+                            + "Right mouse button controls light direction (rotates around y-axis).";
 
             propertiesPanel = new PropertiesPanel(propertiesPanelControl);
             editor = new Editor.Editor(sceneTreeView, propertiesPanel, shaderSource);
-            if (!editor.Load(nodesXmlPath)) MessageBox.Show("Failed to load/parse nodes.xml\nNo nodes available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!editor.Setup(nodesXmlPath)) MessageBox.Show("Failed to load/parse nodes.xml\nNo nodes available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             cameraRotationModeBox.SelectedItem = cameraRotationModeBox.Items[0];
 
@@ -150,7 +151,7 @@ namespace Zwerg
             canvas = new Canvas(glControl1.Width, glControl1.Height);
         }
 
-        void contextMenu_Opening(object sender, CancelEventArgs e)
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
             deleteItem.Enabled = sceneTreeView.SelectedNode != null;
         }
@@ -171,7 +172,6 @@ namespace Zwerg
         }
 
         #region Project view nodes management
-
         private void contextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             ToolStripItem item = e.ClickedItem;
@@ -191,7 +191,7 @@ namespace Zwerg
                 {
                     case "delete":
                         removeCurrentSelection();
-                        break;
+                        return;
 
                     default:
                         break;
@@ -407,40 +407,47 @@ namespace Zwerg
             forceRender = false;
         }
 
-        private void processClickSelection() // shader outputs 4 pixels in the bottom left corner that represent the df primitive ID
+        private void processClickSelection()
         {
             if (GraphicsContext.CurrentContext == null) MessageBox.Show("Failed to process click selection.");
 
+            // shader outputs 4 pixels in the bottom left corner that represent the df primitive ID
             Bitmap bmp = new Bitmap(2, 2);
             System.Drawing.Imaging.BitmapData data = bmp.LockBits(new Rectangle(0, 0, 2, 2), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             GL.ReadPixels(0, 0, 2, 2, PixelFormat.Bgr, PixelType.UnsignedByte, data.Scan0);
             bmp.UnlockBits(data);
 
-            selectTreeNodeById((int)Math.Round(bmp.GetPixel(0, 0).R / (255.0f * 0.04f)));
+            int id = (int)Math.Round(bmp.GetPixel(0, 0).R / (255.0f * 0.04f));
+
+            if (id > 0 && !selectTreeNodeById(id)) MessageBox.Show("Failed to find node " + id + ".");
         }
 
         //TODO: move this into editor class
-        private void selectTreeNodeById(int id)
+        private bool selectTreeNodeById(int id)
         {
             foreach(TreeNode n in sceneTreeView.Nodes)
             {
-                selectTreeNodeById(n, id);
+                if (selectTreeNodeById(n, id)) return true;
             }
+
+            return false;
         }
 
         //TODO: move this into editor class
-        private void selectTreeNodeById(TreeNode node, int id)
+        private bool selectTreeNodeById(TreeNode node, int id)
         {
             if (node.Tag is DistancePrimitive && ((DistancePrimitive)node.Tag).Id == id)
             {
                 sceneTreeView.SelectedNode = node;
-                return;
+                return true;
             }
 
             foreach(TreeNode n in node.Nodes)
             {
-                selectTreeNodeById(n, id);
+                if (selectTreeNodeById(n, id)) return true;
             }
+
+            return false;
         }
 
         private void selectionChanged()
@@ -469,8 +476,9 @@ namespace Zwerg
             return getSceneNodePositionFromTreeNode(sceneTreeView.SelectedNode);
         }
 
+        // SceneNode does not know its parent.
         //TODO: move this into editor class
-        private Vector3 getSceneNodePositionFromTreeNode(TreeNode tnode) // SceneNode does not know its parent.
+        private Vector3 getSceneNodePositionFromTreeNode(TreeNode tnode) 
         {
             if (tnode == null) return Vector3.Zero;
             
@@ -1071,7 +1079,7 @@ namespace Zwerg
             sceneXML().Save(dlg.FileName);
         }
 
-        //TODO: move this into editor class
+        //TODO: move this to editor class
         private void loadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -1142,11 +1150,6 @@ namespace Zwerg
         private void gui_ValueChanged(object sender, EventArgs e)
         {
             forceRender = true;
-        }
-
-        private void xmlButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(sceneXML().ToString());
         }
 
     }

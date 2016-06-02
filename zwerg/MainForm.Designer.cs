@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.glControl1 = new OpenTK.GLControl();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.xmlButton = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.loadButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
@@ -48,31 +47,31 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.usageLabel = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.diffuseColorButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.specularColorButton = new System.Windows.Forms.Button();
-            this.diffuseIntensityBar = new System.Windows.Forms.TrackBar();
-            this.specularIntensityBar = new System.Windows.Forms.TrackBar();
-            this.specularFalloffBar = new System.Windows.Forms.TrackBar();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.showSunBox = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.specularFalloffBar = new System.Windows.Forms.TrackBar();
+            this.specularIntensityBar = new System.Windows.Forms.TrackBar();
+            this.diffuseIntensityBar = new System.Windows.Forms.TrackBar();
+            this.specularColorButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.diffuseColorButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label9 = new System.Windows.Forms.Label();
-            this.farDistanceBar = new System.Windows.Forms.TrackBar();
-            this.label10 = new System.Windows.Forms.Label();
-            this.focusBar = new System.Windows.Forms.TrackBar();
-            this.label1 = new System.Windows.Forms.Label();
-            this.parametersLabel = new System.Windows.Forms.Label();
-            this.mouseSpeedBar = new System.Windows.Forms.TrackBar();
-            this.cameraRotationModeBox = new System.Windows.Forms.ComboBox();
-            this.moveSpeedBar = new System.Windows.Forms.TrackBar();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.showGridBox = new System.Windows.Forms.CheckBox();
             this.showAxisBox = new System.Windows.Forms.CheckBox();
+            this.showGridBox = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.moveSpeedBar = new System.Windows.Forms.TrackBar();
+            this.cameraRotationModeBox = new System.Windows.Forms.ComboBox();
+            this.mouseSpeedBar = new System.Windows.Forms.TrackBar();
+            this.parametersLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.focusBar = new System.Windows.Forms.TrackBar();
+            this.label10 = new System.Windows.Forms.Label();
+            this.farDistanceBar = new System.Windows.Forms.TrackBar();
+            this.label9 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.panel3.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -81,14 +80,14 @@
             this.tabPage6.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.diffuseIntensityBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.specularIntensityBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularFalloffBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.specularIntensityBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.diffuseIntensityBar)).BeginInit();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.farDistanceBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.focusBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mouseSpeedBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveSpeedBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mouseSpeedBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.focusBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.farDistanceBar)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,7 +116,6 @@
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel3.Controls.Add(this.xmlButton);
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.loadButton);
             this.panel3.Controls.Add(this.saveButton);
@@ -128,18 +126,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(219, 695);
             this.panel3.TabIndex = 4;
-            // 
-            // xmlButton
-            // 
-            this.xmlButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.xmlButton.Location = new System.Drawing.Point(157, 606);
-            this.xmlButton.Name = "xmlButton";
-            this.xmlButton.Size = new System.Drawing.Size(56, 55);
-            this.xmlButton.TabIndex = 10;
-            this.xmlButton.Text = "XML";
-            this.xmlButton.UseVisualStyleBackColor = true;
-            this.xmlButton.Click += new System.EventHandler(this.xmlButton_Click);
             // 
             // label11
             // 
@@ -179,7 +165,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.createCodeButton.Location = new System.Drawing.Point(4, 606);
             this.createCodeButton.Name = "createCodeButton";
-            this.createCodeButton.Size = new System.Drawing.Size(147, 55);
+            this.createCodeButton.Size = new System.Drawing.Size(212, 55);
             this.createCodeButton.TabIndex = 6;
             this.createCodeButton.Text = "Apply changes [ENTER]";
             this.createCodeButton.UseVisualStyleBackColor = true;
@@ -260,7 +246,7 @@
             this.tabPage4.Controls.Add(this.sourceOutput);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(186, 143);
+            this.tabPage4.Size = new System.Drawing.Size(186, 150);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Complete";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -287,7 +273,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(186, 143);
+            this.tabPage6.Size = new System.Drawing.Size(186, 150);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Errors";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -351,69 +337,43 @@
             this.tabPage2.Text = "Light";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // showSunBox
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(44, 32);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "diffuse";
+            this.showSunBox.AutoSize = true;
+            this.showSunBox.Location = new System.Drawing.Point(15, 283);
+            this.showSunBox.Name = "showSunBox";
+            this.showSunBox.Size = new System.Drawing.Size(71, 17);
+            this.showSunBox.TabIndex = 9;
+            this.showSunBox.Text = "show sun";
+            this.showSunBox.UseVisualStyleBackColor = true;
+            this.showSunBox.CheckedChanged += new System.EventHandler(this.gui_ValueChanged);
             // 
-            // diffuseColorButton
+            // label7
             // 
-            this.diffuseColorButton.BackColor = System.Drawing.Color.White;
-            this.diffuseColorButton.Location = new System.Drawing.Point(15, 27);
-            this.diffuseColorButton.Name = "diffuseColorButton";
-            this.diffuseColorButton.Size = new System.Drawing.Size(23, 23);
-            this.diffuseColorButton.TabIndex = 1;
-            this.diffuseColorButton.UseVisualStyleBackColor = false;
-            this.diffuseColorButton.Click += new System.EventHandler(this.colorSelectorButton_Click);
+            this.label7.Location = new System.Drawing.Point(6, 175);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(174, 13);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "intensity";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label4
+            // label6
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(44, 145);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "specular";
+            this.label6.Location = new System.Drawing.Point(6, 61);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(174, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "intensity";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // specularColorButton
+            // label5
             // 
-            this.specularColorButton.BackColor = System.Drawing.Color.Gainsboro;
-            this.specularColorButton.Location = new System.Drawing.Point(15, 140);
-            this.specularColorButton.Name = "specularColorButton";
-            this.specularColorButton.Size = new System.Drawing.Size(23, 23);
-            this.specularColorButton.TabIndex = 3;
-            this.specularColorButton.UseVisualStyleBackColor = false;
-            this.specularColorButton.Click += new System.EventHandler(this.colorSelectorButton_Click);
-            // 
-            // diffuseIntensityBar
-            // 
-            this.diffuseIntensityBar.AutoSize = false;
-            this.diffuseIntensityBar.BackColor = System.Drawing.SystemColors.Window;
-            this.diffuseIntensityBar.Location = new System.Drawing.Point(6, 77);
-            this.diffuseIntensityBar.Maximum = 100;
-            this.diffuseIntensityBar.Name = "diffuseIntensityBar";
-            this.diffuseIntensityBar.Size = new System.Drawing.Size(174, 28);
-            this.diffuseIntensityBar.TabIndex = 4;
-            this.diffuseIntensityBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.diffuseIntensityBar.Value = 40;
-            this.diffuseIntensityBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
-            // 
-            // specularIntensityBar
-            // 
-            this.specularIntensityBar.AutoSize = false;
-            this.specularIntensityBar.BackColor = System.Drawing.SystemColors.Window;
-            this.specularIntensityBar.Location = new System.Drawing.Point(6, 191);
-            this.specularIntensityBar.Maximum = 100;
-            this.specularIntensityBar.Name = "specularIntensityBar";
-            this.specularIntensityBar.Size = new System.Drawing.Size(174, 28);
-            this.specularIntensityBar.TabIndex = 5;
-            this.specularIntensityBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.specularIntensityBar.Value = 30;
-            this.specularIntensityBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
+            this.label5.Location = new System.Drawing.Point(6, 222);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(174, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "falloff";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // specularFalloffBar
             // 
@@ -429,43 +389,69 @@
             this.specularFalloffBar.Value = 50;
             this.specularFalloffBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
             // 
-            // label5
+            // specularIntensityBar
             // 
-            this.label5.Location = new System.Drawing.Point(6, 222);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(174, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "falloff";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.specularIntensityBar.AutoSize = false;
+            this.specularIntensityBar.BackColor = System.Drawing.SystemColors.Window;
+            this.specularIntensityBar.Location = new System.Drawing.Point(6, 191);
+            this.specularIntensityBar.Maximum = 100;
+            this.specularIntensityBar.Name = "specularIntensityBar";
+            this.specularIntensityBar.Size = new System.Drawing.Size(174, 28);
+            this.specularIntensityBar.TabIndex = 5;
+            this.specularIntensityBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.specularIntensityBar.Value = 30;
+            this.specularIntensityBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
             // 
-            // label6
+            // diffuseIntensityBar
             // 
-            this.label6.Location = new System.Drawing.Point(6, 61);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(174, 13);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "intensity";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.diffuseIntensityBar.AutoSize = false;
+            this.diffuseIntensityBar.BackColor = System.Drawing.SystemColors.Window;
+            this.diffuseIntensityBar.Location = new System.Drawing.Point(6, 77);
+            this.diffuseIntensityBar.Maximum = 100;
+            this.diffuseIntensityBar.Name = "diffuseIntensityBar";
+            this.diffuseIntensityBar.Size = new System.Drawing.Size(174, 28);
+            this.diffuseIntensityBar.TabIndex = 4;
+            this.diffuseIntensityBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.diffuseIntensityBar.Value = 40;
+            this.diffuseIntensityBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
             // 
-            // label7
+            // specularColorButton
             // 
-            this.label7.Location = new System.Drawing.Point(6, 175);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(174, 13);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "intensity";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.specularColorButton.BackColor = System.Drawing.Color.Gainsboro;
+            this.specularColorButton.Location = new System.Drawing.Point(15, 140);
+            this.specularColorButton.Name = "specularColorButton";
+            this.specularColorButton.Size = new System.Drawing.Size(23, 23);
+            this.specularColorButton.TabIndex = 3;
+            this.specularColorButton.UseVisualStyleBackColor = false;
+            this.specularColorButton.Click += new System.EventHandler(this.colorSelectorButton_Click);
             // 
-            // showSunBox
+            // label4
             // 
-            this.showSunBox.AutoSize = true;
-            this.showSunBox.Location = new System.Drawing.Point(15, 283);
-            this.showSunBox.Name = "showSunBox";
-            this.showSunBox.Size = new System.Drawing.Size(71, 17);
-            this.showSunBox.TabIndex = 9;
-            this.showSunBox.Text = "show sun";
-            this.showSunBox.UseVisualStyleBackColor = true;
-            this.showSunBox.CheckedChanged += new System.EventHandler(this.gui_ValueChanged);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(44, 145);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "specular";
+            // 
+            // diffuseColorButton
+            // 
+            this.diffuseColorButton.BackColor = System.Drawing.Color.White;
+            this.diffuseColorButton.Location = new System.Drawing.Point(15, 27);
+            this.diffuseColorButton.Name = "diffuseColorButton";
+            this.diffuseColorButton.Size = new System.Drawing.Size(23, 23);
+            this.diffuseColorButton.TabIndex = 1;
+            this.diffuseColorButton.UseVisualStyleBackColor = false;
+            this.diffuseColorButton.Click += new System.EventHandler(this.colorSelectorButton_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(44, 32);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "diffuse";
             // 
             // tabPage1
             // 
@@ -490,14 +476,134 @@
             this.tabPage1.Text = "View";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // label9
+            // showAxisBox
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 154);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(62, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "far distance";
+            this.showAxisBox.AutoSize = true;
+            this.showAxisBox.Checked = true;
+            this.showAxisBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showAxisBox.Location = new System.Drawing.Point(9, 248);
+            this.showAxisBox.Name = "showAxisBox";
+            this.showAxisBox.Size = new System.Drawing.Size(72, 17);
+            this.showAxisBox.TabIndex = 5;
+            this.showAxisBox.Text = "show axis";
+            this.showAxisBox.UseVisualStyleBackColor = true;
+            this.showAxisBox.CheckedChanged += new System.EventHandler(this.gui_ValueChanged);
+            // 
+            // showGridBox
+            // 
+            this.showGridBox.AutoSize = true;
+            this.showGridBox.Checked = true;
+            this.showGridBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showGridBox.Location = new System.Drawing.Point(9, 271);
+            this.showGridBox.Name = "showGridBox";
+            this.showGridBox.Size = new System.Drawing.Size(94, 17);
+            this.showGridBox.TabIndex = 4;
+            this.showGridBox.Text = "show floor grid";
+            this.showGridBox.UseVisualStyleBackColor = true;
+            this.showGridBox.CheckedChanged += new System.EventHandler(this.gui_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 109);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "move speed";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 14);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(71, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "camera mode";
+            // 
+            // moveSpeedBar
+            // 
+            this.moveSpeedBar.AutoSize = false;
+            this.moveSpeedBar.BackColor = System.Drawing.SystemColors.Window;
+            this.moveSpeedBar.Location = new System.Drawing.Point(6, 125);
+            this.moveSpeedBar.Maximum = 100;
+            this.moveSpeedBar.Minimum = 10;
+            this.moveSpeedBar.Name = "moveSpeedBar";
+            this.moveSpeedBar.Size = new System.Drawing.Size(174, 27);
+            this.moveSpeedBar.TabIndex = 2;
+            this.moveSpeedBar.TickFrequency = 10;
+            this.moveSpeedBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.moveSpeedBar.Value = 50;
+            // 
+            // cameraRotationModeBox
+            // 
+            this.cameraRotationModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cameraRotationModeBox.FormattingEnabled = true;
+            this.cameraRotationModeBox.Items.AddRange(new object[] {
+            "focus selection",
+            "free fly/look (mouse+WASD)"});
+            this.cameraRotationModeBox.Location = new System.Drawing.Point(9, 29);
+            this.cameraRotationModeBox.Name = "cameraRotationModeBox";
+            this.cameraRotationModeBox.Size = new System.Drawing.Size(171, 21);
+            this.cameraRotationModeBox.TabIndex = 1;
+            this.cameraRotationModeBox.SelectedIndexChanged += new System.EventHandler(this.cameraRotationModeBox_SelectedIndexChanged);
+            // 
+            // mouseSpeedBar
+            // 
+            this.mouseSpeedBar.AutoSize = false;
+            this.mouseSpeedBar.BackColor = System.Drawing.SystemColors.Window;
+            this.mouseSpeedBar.Location = new System.Drawing.Point(6, 81);
+            this.mouseSpeedBar.Maximum = 100;
+            this.mouseSpeedBar.Minimum = 10;
+            this.mouseSpeedBar.Name = "mouseSpeedBar";
+            this.mouseSpeedBar.Size = new System.Drawing.Size(174, 25);
+            this.mouseSpeedBar.TabIndex = 1;
+            this.mouseSpeedBar.TickFrequency = 10;
+            this.mouseSpeedBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.mouseSpeedBar.Value = 50;
+            // 
+            // parametersLabel
+            // 
+            this.parametersLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.parametersLabel.Location = new System.Drawing.Point(6, 310);
+            this.parametersLabel.Name = "parametersLabel";
+            this.parametersLabel.Size = new System.Drawing.Size(174, 163);
+            this.parametersLabel.TabIndex = 0;
+            this.parametersLabel.Text = "-";
+            this.parametersLabel.Click += new System.EventHandler(this.parametersLabel_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 65);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "mouse sensitivity";
+            // 
+            // focusBar
+            // 
+            this.focusBar.AutoSize = false;
+            this.focusBar.BackColor = System.Drawing.SystemColors.Window;
+            this.focusBar.Location = new System.Drawing.Point(6, 214);
+            this.focusBar.Maximum = 100;
+            this.focusBar.Minimum = 10;
+            this.focusBar.Name = "focusBar";
+            this.focusBar.Size = new System.Drawing.Size(174, 25);
+            this.focusBar.TabIndex = 1;
+            this.focusBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.focusBar.Value = 50;
+            this.focusBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 198);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(33, 13);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "focus";
             // 
             // farDistanceBar
             // 
@@ -514,134 +620,14 @@
             this.farDistanceBar.Value = 25;
             this.farDistanceBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
             // 
-            // label10
+            // label9
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 198);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(33, 13);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "focus";
-            // 
-            // focusBar
-            // 
-            this.focusBar.AutoSize = false;
-            this.focusBar.BackColor = System.Drawing.SystemColors.Window;
-            this.focusBar.Location = new System.Drawing.Point(6, 214);
-            this.focusBar.Maximum = 100;
-            this.focusBar.Minimum = 10;
-            this.focusBar.Name = "focusBar";
-            this.focusBar.Size = new System.Drawing.Size(174, 25);
-            this.focusBar.TabIndex = 1;
-            this.focusBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.focusBar.Value = 50;
-            this.focusBar.ValueChanged += new System.EventHandler(this.gui_ValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 65);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "mouse sensitivity";
-            // 
-            // parametersLabel
-            // 
-            this.parametersLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.parametersLabel.Location = new System.Drawing.Point(6, 310);
-            this.parametersLabel.Name = "parametersLabel";
-            this.parametersLabel.Size = new System.Drawing.Size(174, 163);
-            this.parametersLabel.TabIndex = 0;
-            this.parametersLabel.Text = "-";
-            this.parametersLabel.Click += new System.EventHandler(this.parametersLabel_Click);
-            // 
-            // mouseSpeedBar
-            // 
-            this.mouseSpeedBar.AutoSize = false;
-            this.mouseSpeedBar.BackColor = System.Drawing.SystemColors.Window;
-            this.mouseSpeedBar.Location = new System.Drawing.Point(6, 81);
-            this.mouseSpeedBar.Maximum = 100;
-            this.mouseSpeedBar.Minimum = 10;
-            this.mouseSpeedBar.Name = "mouseSpeedBar";
-            this.mouseSpeedBar.Size = new System.Drawing.Size(174, 25);
-            this.mouseSpeedBar.TabIndex = 1;
-            this.mouseSpeedBar.TickFrequency = 10;
-            this.mouseSpeedBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.mouseSpeedBar.Value = 50;
-            // 
-            // cameraRotationModeBox
-            // 
-            this.cameraRotationModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cameraRotationModeBox.FormattingEnabled = true;
-            this.cameraRotationModeBox.Items.AddRange(new object[] {
-            "focus selection",
-            "free fly/look (mouse+WASD)"});
-            this.cameraRotationModeBox.Location = new System.Drawing.Point(9, 29);
-            this.cameraRotationModeBox.Name = "cameraRotationModeBox";
-            this.cameraRotationModeBox.Size = new System.Drawing.Size(171, 21);
-            this.cameraRotationModeBox.TabIndex = 1;
-            this.cameraRotationModeBox.SelectedIndexChanged += new System.EventHandler(this.cameraRotationModeBox_SelectedIndexChanged);
-            // 
-            // moveSpeedBar
-            // 
-            this.moveSpeedBar.AutoSize = false;
-            this.moveSpeedBar.BackColor = System.Drawing.SystemColors.Window;
-            this.moveSpeedBar.Location = new System.Drawing.Point(6, 125);
-            this.moveSpeedBar.Maximum = 100;
-            this.moveSpeedBar.Minimum = 10;
-            this.moveSpeedBar.Name = "moveSpeedBar";
-            this.moveSpeedBar.Size = new System.Drawing.Size(174, 27);
-            this.moveSpeedBar.TabIndex = 2;
-            this.moveSpeedBar.TickFrequency = 10;
-            this.moveSpeedBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.moveSpeedBar.Value = 50;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 14);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(71, 13);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "camera mode";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 109);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "move speed";
-            // 
-            // showGridBox
-            // 
-            this.showGridBox.AutoSize = true;
-            this.showGridBox.Checked = true;
-            this.showGridBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showGridBox.Location = new System.Drawing.Point(9, 271);
-            this.showGridBox.Name = "showGridBox";
-            this.showGridBox.Size = new System.Drawing.Size(94, 17);
-            this.showGridBox.TabIndex = 4;
-            this.showGridBox.Text = "show floor grid";
-            this.showGridBox.UseVisualStyleBackColor = true;
-            this.showGridBox.CheckedChanged += new System.EventHandler(this.gui_ValueChanged);
-            // 
-            // showAxisBox
-            // 
-            this.showAxisBox.AutoSize = true;
-            this.showAxisBox.Checked = true;
-            this.showAxisBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showAxisBox.Location = new System.Drawing.Point(9, 248);
-            this.showAxisBox.Name = "showAxisBox";
-            this.showAxisBox.Size = new System.Drawing.Size(72, 17);
-            this.showAxisBox.TabIndex = 5;
-            this.showAxisBox.Text = "show axis";
-            this.showAxisBox.UseVisualStyleBackColor = true;
-            this.showAxisBox.CheckedChanged += new System.EventHandler(this.gui_ValueChanged);
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 154);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(62, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "far distance";
             // 
             // tabControl1
             // 
@@ -681,15 +667,15 @@
             this.tabPage5.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.diffuseIntensityBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.specularIntensityBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularFalloffBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.specularIntensityBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.diffuseIntensityBar)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.farDistanceBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.focusBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mouseSpeedBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveSpeedBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mouseSpeedBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.focusBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.farDistanceBar)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -712,7 +698,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TextBox errorOutput;
-        private System.Windows.Forms.Button xmlButton;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.Label usageLabel;
         private System.Windows.Forms.TabPage tabPage2;

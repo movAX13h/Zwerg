@@ -4,10 +4,10 @@ namespace Editor.Nodes
 {
     public class DomainOperation : SceneNode
     {
-        public DomainOperation(string type, string name, string codeMask) : base(type, name, codeMask)
+        public DomainOperation(string type, string name, string codeMask, string code) : base(type, name, codeMask, code)
         { }
 
-        public DomainOperation(SceneNode ori) : base("", "", "")
+        public DomainOperation(SceneNode ori) : base("", "", "", "")
         {
             CloneFrom(ori);
         }

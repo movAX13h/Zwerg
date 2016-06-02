@@ -128,9 +128,8 @@
     <Content Include="bin\Debug\nodes.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="bin\Debug\raymarcher.fs" />
+    <Content Include="bin\Debug\shader.fs" />
     <Content Include="icon.ico" />
-    <Content Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

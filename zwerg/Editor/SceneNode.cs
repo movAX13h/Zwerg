@@ -22,17 +22,20 @@ namespace Editor
                 name = value;
             }
         }
-        public string CodeMask;
+        public string CodeMask { get; private set; }
+        public string Code { get; private set; }
+
         public TreeNode TreeNode { get; private set; }
         public bool Enabled = true;
 
         public List<InputProperty> Properties { get; private set; }
 
-        public SceneNode(string type, string name, string codeMask)
+        public SceneNode(string type, string name, string codeMask, string code)
         {
             this.name = name;
             Type = type;
             CodeMask = codeMask;
+            Code = code;
 
             Properties = new List<InputProperty>();
 
@@ -106,6 +109,7 @@ namespace Editor
             Type = ori.Type;
             Name = ori.Name;
             CodeMask = ori.CodeMask;
+            Code = ori.Code;
             Properties = new List<InputProperty>();
             
             foreach(InputProperty prop in ori.Properties)

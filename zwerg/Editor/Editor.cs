@@ -40,43 +40,41 @@ namespace Editor
             Reset();
         }
 
-        public bool Load(string nodesXMLFilename)
+        public bool Setup(string nodesXMLFilename)
         {
             try
             {
                 XElement x = XElement.Load(nodesXMLFilename, LoadOptions.None);
-
                 XElement settings = x.Element("settings");
                 foreach (XElement n in x.Elements("node"))
-                {
+                {                    
+                    string code = n.Element("function") != null ? n.Element("function").Value : "";
+                    SceneNode node = null;
+
                     switch (n.Attribute("type").Value)
                     {
-                        case "do":
-                            DistancePrimitive dp = new DistancePrimitive(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("code").Value);
-                            foreach (XElement p in n.Elements("prop"))
-                            {
-                                dp.Properties.Add(createInputProperty(p.Attribute("type").Value, p.Attribute("name").Value, p.Attribute("default").Value));
-                            }
-                            DistanceFieldTypes.Add(dp);
+                        case "dp":
+                            node = new DistancePrimitive(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code);
+                            DistanceFieldTypes.Add(node as DistancePrimitive);
                             break;
 
                         case "distop":
-                            DistanceOperation distop = new DistanceOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("code").Value);
-                            foreach (XElement p in n.Elements("prop"))
-                            {
-                                distop.Properties.Add(createInputProperty(p.Attribute("type").Value, p.Attribute("name").Value, p.Attribute("default").Value));
-                            }
-                            DistanceOperations.Add(distop);
+                            node = new DistanceOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code);
+                            DistanceOperations.Add(node as DistanceOperation);
                             break;
 
                         case "domop":
-                            DomainOperation dop = new DomainOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("code").Value);
-                            foreach (XElement p in n.Elements("prop"))
-                            {
-                                dop.Properties.Add(createInputProperty(p.Attribute("type").Value, p.Attribute("name").Value, p.Attribute("default").Value));
-                            }
-                            DomainOperations.Add(dop);
+                            node = new DomainOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code);
+                            DomainOperations.Add(node as DomainOperation);
                             break;
+                    }
+
+                    if (node != null && n.Element("properties") != null)
+                    {
+                        foreach (XElement p in n.Element("properties").Elements("property"))
+                        {
+                            node.Properties.Add(createInputProperty(p.Attribute("type").Value, p.Attribute("name").Value, p.Attribute("default").Value));
+                        }
                     }
                 }
             }
@@ -162,31 +160,6 @@ namespace Editor
             return null;
         }
 
-        //------------
-        /*
-        private void addNodesRecursive(TreeNode parent, TreeNode parentTreeNode)
-        {
-            foreach (TreeNode node in parent.Nodes)
-            {
-                TreeNode tn = createTreeNode(node);
-                if (parentTreeNode == null) sceneTreeView.Nodes.Add(tn);
-                else parentTreeNode.Nodes.Add(tn);
-
-                addNodesRecursive(node, tn);
-            }
-        }
-        */
-        /*
-        private void updateSceneListView()
-        {
-            sceneTreeView.Nodes.Clear();
-            addNodesRecursive(editor.Scene, null);
-            sceneTreeView.ExpandAll();
-        }
-        */
-        //--------------
-
-
         public void SceneFromXElement(XElement x)
         {
             foreach(XElement cx in x.Elements())
@@ -220,12 +193,19 @@ namespace Editor
             return scene;
         }
 
+        private Dictionary<string, string> uniqueUsedFunctions;
+
         public string SceneToShaderCode()
         {
             errors.Clear();
+            uniqueUsedFunctions = new Dictionary<string, string>();
             domainId = 0;
             SceneSourceCode = nodeToShaderCode(tree.Nodes, "", 0);
-            return shaderSourceCode.Replace("#ifdef SCENE", "#ifdef SCENE" + Environment.NewLine + SceneSourceCode);
+
+            string functionsCode = string.Join("\n\n", uniqueUsedFunctions.Values);
+            string code = shaderSourceCode.Replace("#ifdef SCENE", "#ifdef SCENE\n" + Environment.NewLine + SceneSourceCode);
+            code = code.Replace("#ifdef FUNCTIONS", "#ifdef FUNCTIONS" + Environment.NewLine + functionsCode);
+            return code;
         }
 
         private string nodeToShaderCode(TreeNodeCollection nodes, string code, int domain)
@@ -234,6 +214,8 @@ namespace Editor
             {
                 SceneNode sceneNode = (SceneNode)node.Tag;
                 if (!sceneNode.Enabled) continue;
+
+                if (!uniqueUsedFunctions.ContainsKey(sceneNode.Name)) uniqueUsedFunctions.Add(sceneNode.Name, sceneNode.Code);
 
                 // get color property from node
                 string color = "vec4(1.0)";

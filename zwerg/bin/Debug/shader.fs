@@ -27,119 +27,26 @@ uniform float focus;
 uniform float far;
 
 #define SCENE
+#define FUNCTIONS
+
 #define pi2 6.283185307179586476925286766559
-
-// polynomial smooth min (k = 0.1); by iq
-float smin(float a, float b, float k)
-{
-    float h = clamp(0.5+0.5*(b-a)/k, 0.0, 1.0);
-    return mix(b, a, h) - k*h*(1.0-h);
-}
-
-
-vec3 rY(vec3 v, float t) 
-{
-	float COS = cos(t);
-	float SIN = sin(t);
-	return vec3(COS*v.x-SIN*v.z, v.y, SIN*v.x+COS*v.z);
-}
-
-/*
-float sdCuboc(vec3 p, vec3 r) // by vincent francois, https://www.shadertoy.com/view/lssXW7
-{
-	return
-		max(
-			length(p) - length(r) -
-			(abs(r.x)+abs(r.y)+abs(r.z)) * 0.33,
-			max(abs(p.x) - r.x, 0.0) - 0.5 * r.x +
-			max(abs(p.y) - r.y, 0.0) - 0.5 * r.y +
-			max(abs(p.z) - r.z, 0.0) - 0.5 * r.z
-		);			
-}
-
-float sdRhombi(vec3 p, vec3 r) {
-	return
-		max(abs(p.x) - r.x, 0.0) - 0.5 * r.x +
-		max(abs(p.y) - r.y, 0.0) - 0.5 * r.y +
-		max(abs(p.z) - r.z, 0.0) - 0.5 * r.z;
-}
-*/
-
-float sdBox(vec3 p, vec3 b)
-{	
-	vec3 d = abs(p) - b;
-	return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
-}
-
-float sdSphere(vec3 p, float r)
-{
-	p.y *= 1.06;
-	return length(p)-r;
-}
-
-float sdPlane(vec3 p, vec4 n)
-{
-	n.xyz = normalize(n.xyz);
-	return dot(p,n.xyz) + n.w;
-}
-
-float sdHexPrism(vec3 p, vec2 h)
-{
-    vec3 q = abs(p);
-    return max(q.z-h.y,max(q.x+q.y*0.57735,q.y*1.1547)-h.x);
-}
-
-float sdTriPrism(vec3 p, vec2 h)
-{
-    vec3 q = abs(p);
-    return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
-}
-
-float sdTorus(vec3 p, vec2 t)
-{
-  vec2 q = vec2(length(p.xy)-t.x,p.z);
-  return length(q)-t.y;
-}
-
-float sdCapsule(vec3 p, vec3 a, vec3 b, float r)
-{
-    vec3 pa = p - a, ba = b - a;
-    float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
-    return length( pa - ba*h ) - r;
-}
-
-float sdCappedCylinder(vec3 p, vec2 h)
-{
-  vec2 d = abs(vec2(length(p.xz),p.y)) - h;
-  return min(max(d.x,d.y),0.0) + length(max(d,0.0));
-}
-
-float opU(float d1, float d2)
-{
-    return min(d1,d2);
-}
-
-float opS(float d1, float d2)
-{
-    return max(-d1,d2);
-}
-
-float opI(float d1, float d2)
-{
-    return max(d1,d2);
-}
-
-vec3 opRep(vec3 p, vec3 c)
-{
-    return mod(p,c)-0.5*c;
-}
 
 vec2 rotate(vec2 p, float a)
 {
 	vec2 r;
-	r.x = p.x*cos(a) - p.y*sin(a);
-	r.y = p.x*sin(a) + p.y*cos(a);
+	float sa = sin(a), ca = cos(a);
+	r.x = p.x*ca - p.y*sa;
+	r.y = p.x*sa + p.y*ca;
 	return r;
+}
+
+#ifdef FUNCTIONS
+#endif
+
+float sdSun(vec3 p, float r)
+{
+	p.y *= 1.06;
+	return length(p) - r;
 }
 
 struct Hit
@@ -188,7 +95,7 @@ Hit scene(vec3 p)
 
 	if (showSun == 1)
 	{
-		d1 = sdSphere(p-lightPosNormalized*2.0, 0.1);
+		d1 = sdSun(p-lightPosNormalized*2.0, 0.1);
 		if (d1 < d)	{ d = d1; col = vec4(1.0, 1.0, 0.0, 1.0); }
 	}
 
