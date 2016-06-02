@@ -10,32 +10,31 @@ Feel free to fork and modify.
 
 ## Changelog
 
+- **1.4** - 2016-06-02: moved sd functions from shader.fs to nodes.xml (preparing for hg_sdf), code cleanup
 - **1.3** - 2014-06-15: external nodes.xml (contains all available nodes from scene view context menu), simplified internal tree structure and code cleanup, fixed: node order
 - **1.2** - 2014-06-14: fixed mouse sensitivity issues
 - **1.1** - 2014-06-10: mouse click selection of df objects + minor fixes
 
-## Using
-- C# .NET4.5, VisualStudio 12 (ult.2013)
+## Compiling
+- C# .NET4.5, VisualStudio 12 (2013) solution
 - OpenGL via OpenTK (find dlls in bin/Debug)
 
 ## Download
-- from author server: http://thrill-project.com/archiv/coding/Zwerg.zip (754kb)
+- Binary (version 1.3) from author server: http://thrill-project.com/archiv/coding/Zwerg.zip (754kb)
 
 ## Features
 - distance functions (primitives)
 - distance operations
 - domain operations
 - scene view
-- realtime preview
+- realtime preview/camera/light
 - properties panel
 - select model on mouse click (experimental)
 - delete node (del key and context menu)
-- save to file (xml)
-- load from file (xml)
+- save/load scene to/from file (xml)
 
 ## To do
 - better scene treeview
-- rotation nodes
 - export shader code (remove all Zwerg specific code)
 - minimize output shader code (http://www.pouet.net/prod.php?which=55176)
 - animation
