@@ -11,10 +11,10 @@ namespace Editor.Nodes
     {
         public int Id = 0;
 
-        public DistancePrimitive(string type, string name, string codeMask, string code) : base(type, name, codeMask, code)
+        public DistancePrimitive(string type, string name, string codeMask, string code, string[] requires, string comment) : base(type, name, codeMask, code, requires, comment)
         { }
 
-        public DistancePrimitive(SceneNode ori) : base("", "", "", "")
+        public DistancePrimitive(SceneNode ori) : base("", "", "", "", null, "")
         {
             CloneFrom(ori);
         }

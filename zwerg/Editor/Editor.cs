@@ -14,7 +14,9 @@ namespace Editor
         public List<DistancePrimitive> DistanceFieldTypes { get; private set; }
         public List<DistanceOperation> DistanceOperations { get; private set; }
         public List<DomainOperation> DomainOperations { get; private set; }
-        //public SceneNode Scene { get; private set; }
+
+        public Dictionary<string, HelperCode> Helpers { get; private set; }
+        
         public PropertiesPanel PropertiesPanel { get; private set; }
         private TreeView tree;
 
@@ -33,6 +35,7 @@ namespace Editor
             shaderSourceCode = source;
             PropertiesPanel = propertiesPanel;
 
+            Helpers = new Dictionary<string, HelperCode>();
             DistanceFieldTypes = new List<DistancePrimitive>();
             DistanceOperations = new List<DistanceOperation>();
             DomainOperations = new List<DomainOperation>();
@@ -40,31 +43,55 @@ namespace Editor
             Reset();
         }
 
-        public bool Setup(string nodesXMLFilename)
+        public bool Setup(string functionsXMLFilename)
         {
             try
             {
-                XElement x = XElement.Load(nodesXMLFilename, LoadOptions.None);
-                XElement settings = x.Element("settings");
-                foreach (XElement n in x.Elements("node"))
+                XElement x = XElement.Load(functionsXMLFilename, LoadOptions.None);
+                
+                XElement helpers = x.Element("helpers");
+                foreach(XElement h in helpers.Elements("code"))
+                {
+                    XAttribute comment = h.Attribute("comment");
+                    HelperCode helper = new HelperCode(h.Attribute("name").Value, h.Value, comment == null ? "" : comment.Value);
+                    Helpers.Add(helper.Name, helper);
+                }
+
+                XElement nodes = x.Element("nodes");
+
+                foreach (XElement n in nodes.Elements("node"))
                 {                    
-                    string code = n.Element("function") != null ? n.Element("function").Value : "";
+                    string code = "";
+                    string[] requires = null;
+
+                    XElement func = n.Element("function");
+                    if (func != null)
+                    {
+                        code = func.Value;
+                        XAttribute requ = func.Attribute("requires");
+                        if (requ != null) requires = requ.Value.Split(",".ToCharArray());
+                    }
+
+                    XAttribute com = n.Attribute("comment");
+                    string comment = "";
+                    if (com != null) comment = com.Value;
+
                     SceneNode node = null;
 
                     switch (n.Attribute("type").Value)
                     {
                         case "dp":
-                            node = new DistancePrimitive(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code);
+                            node = new DistancePrimitive(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code, requires, comment);
                             DistanceFieldTypes.Add(node as DistancePrimitive);
                             break;
 
                         case "distop":
-                            node = new DistanceOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code);
+                            node = new DistanceOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code, requires, comment);
                             DistanceOperations.Add(node as DistanceOperation);
                             break;
 
                         case "domop":
-                            node = new DomainOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code);
+                            node = new DomainOperation(n.Attribute("name").Value, n.Attribute("caption").Value, n.Attribute("mask").Value, code, requires, comment);
                             DomainOperations.Add(node as DomainOperation);
                             break;
                     }
@@ -80,7 +107,7 @@ namespace Editor
             }
             catch (Exception e)
             {
-                errors.Add("Failed to load nodes.xml ("+e.Message+")");
+                errors.Add("Failed to load/parse "+functionsXMLFilename+":\n"+e.Message);
                 return false;
             }
 
@@ -91,6 +118,9 @@ namespace Editor
         {
             switch(type)
             {
+                case "int":
+                    return new InputInt(name, value);
+
                 case "float":
                     return new InputFloat(name, value);
 
@@ -208,6 +238,52 @@ namespace Editor
             return code;
         }
 
+        private SceneNode nodeByType(string type)
+        {
+            foreach (DistancePrimitive d in DistanceFieldTypes)
+            {
+                if (d.Type == type) return d;
+            }
+
+            foreach (DistanceOperation d in DistanceOperations)
+            {
+                if (d.Type == type) return d;
+            }
+
+            foreach (DomainOperation d in DomainOperations)
+            {
+                if (d.Type == type) return d;
+            }
+
+            return null;
+        }
+
+        private void collectUsedFunctions(SceneNode node)
+        {
+            string type = node.Type;
+
+            // requires first
+            if (node.Requires != null)
+            {
+                foreach (string require in node.Requires)
+                {
+                    // look in helpers list
+                    if (Helpers.ContainsKey(require))
+                    {
+                        if (!uniqueUsedFunctions.ContainsKey(require)) uniqueUsedFunctions.Add(require, Helpers[require].Code);
+                        continue;
+                    }
+
+                    // look for node
+                    SceneNode requiredNode = nodeByType(require);
+                    if (requiredNode != null) collectUsedFunctions(requiredNode);
+                }
+            }
+
+            // add code (once)
+            if (!uniqueUsedFunctions.ContainsKey(type)) uniqueUsedFunctions.Add(type, node.Code);
+        }
+
         private string nodeToShaderCode(TreeNodeCollection nodes, string code, int domain)
         {
             foreach (TreeNode node in nodes)
@@ -215,7 +291,7 @@ namespace Editor
                 SceneNode sceneNode = (SceneNode)node.Tag;
                 if (!sceneNode.Enabled) continue;
 
-                if (!uniqueUsedFunctions.ContainsKey(sceneNode.Name)) uniqueUsedFunctions.Add(sceneNode.Name, sceneNode.Code);
+                collectUsedFunctions(sceneNode);
 
                 // get color property from node
                 string color = "vec4(1.0)";
@@ -232,7 +308,7 @@ namespace Editor
                 // distance operation
                 else if (sceneNode is DistanceOperation)
                 {
-                    string[] values = new string[2];
+                    string[] values = new string[2 + sceneNode.Properties.Count];
 
                     int i = 0;
                     foreach (TreeNode child in node.Nodes)
@@ -244,7 +320,7 @@ namespace Editor
                         {
                             if (i > 1)
                             {
-                                errors.Add("Distance operation '" + sceneNode.Name + "' contains more than 2 primitives." + Environment.NewLine + "Only the first two are used.");
+                                errors.Add("Distance operation '" + sceneNode.Name + "' contains more than 2 subnodes." + Environment.NewLine + "Only the first two are used.");
                                 break;
                             }
 
@@ -253,6 +329,9 @@ namespace Editor
                                 c = childSceneNode.GetPropertyByName("color");
                                 if (c != null) color = "vec4(" + c.Value + ",1.0)";
                             }
+
+                            collectUsedFunctions(childSceneNode);
+
                             values[i] = childSceneNode.ToCode(domain);
                             i++;
                         }
@@ -260,10 +339,16 @@ namespace Editor
 
                     if (i == 2)
                     {
-                        code += "d1 = " + String.Format(sceneNode.ToCode(domain), values) + "; ";
+                        foreach (InputProperty p in sceneNode.Properties)
+                        {
+                            values[i] = p.Value;
+                            i++;
+                        }
+
+                        code += "d1 = " + String.Format(sceneNode.CodeMask, values) + "; ";
                         code += "if (d1 < d) { d = d1; col = " + color + "; }" + Environment.NewLine;
                     }
-                    else errors.Add("Distance operation '" + sceneNode.Name + "' requires 2 primitives.");
+                    else errors.Add("Distance operation '" + sceneNode.Name + "' requires 2 subnodes.");
                 }
                 // domain operation
                 else if (sceneNode is DomainOperation)

@@ -57,7 +57,7 @@ namespace Zwerg
         private Editor.Editor editor;
         private PropertiesPanel propertiesPanel;
 
-        private string nodesXmlPath = "nodes.xml";
+        private string functionsXmlPath = "functions.xml";
         private string shaderPath = "shader.fs";
         private string shaderSource = "";
 
@@ -88,7 +88,7 @@ namespace Zwerg
 
             propertiesPanel = new PropertiesPanel(propertiesPanelControl);
             editor = new Editor.Editor(sceneTreeView, propertiesPanel, shaderSource);
-            if (!editor.Setup(nodesXmlPath)) MessageBox.Show("Failed to load/parse nodes.xml\nNo nodes available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!editor.Setup(functionsXmlPath)) MessageBox.Show(editor.Errors+"\n\nNo nodes available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             cameraRotationModeBox.SelectedItem = cameraRotationModeBox.Items[0];
 

@@ -98,9 +98,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.glControl1.BackColor = System.Drawing.Color.Black;
             this.glControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.glControl1.Location = new System.Drawing.Point(212, 13);
+            this.glControl1.Location = new System.Drawing.Point(222, 13);
             this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(673, 682);
+            this.glControl1.Size = new System.Drawing.Size(663, 682);
             this.glControl1.TabIndex = 0;
             this.glControl1.VSync = true;
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
@@ -212,7 +212,7 @@
             this.tabControl2.Location = new System.Drawing.Point(12, 520);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(194, 176);
+            this.tabControl2.Size = new System.Drawing.Size(204, 176);
             this.tabControl2.TabIndex = 7;
             // 
             // tabPage3
@@ -220,7 +220,7 @@
             this.tabPage3.Controls.Add(this.sceneOutput);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(186, 150);
+            this.tabPage3.Size = new System.Drawing.Size(196, 150);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Scene code";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -237,7 +237,7 @@
             this.sceneOutput.Name = "sceneOutput";
             this.sceneOutput.ReadOnly = true;
             this.sceneOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.sceneOutput.Size = new System.Drawing.Size(186, 150);
+            this.sceneOutput.Size = new System.Drawing.Size(196, 150);
             this.sceneOutput.TabIndex = 8;
             this.sceneOutput.WordWrap = false;
             // 
@@ -471,7 +471,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(186, 476);
+            this.tabPage1.Size = new System.Drawing.Size(196, 476);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "View";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -568,7 +568,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parametersLabel.Location = new System.Drawing.Point(6, 310);
             this.parametersLabel.Name = "parametersLabel";
-            this.parametersLabel.Size = new System.Drawing.Size(174, 163);
+            this.parametersLabel.Size = new System.Drawing.Size(184, 163);
             this.parametersLabel.TabIndex = 0;
             this.parametersLabel.Text = "-";
             this.parametersLabel.Click += new System.EventHandler(this.parametersLabel_Click);
@@ -637,7 +637,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(194, 502);
+            this.tabControl1.Size = new System.Drawing.Size(204, 502);
             this.tabControl1.TabIndex = 6;
             // 
             // MainForm

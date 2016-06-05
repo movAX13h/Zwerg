@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,10 +34,8 @@ namespace Editor
                 return;
             }
 
-            newLabel("labelNodeName", "Node name", y);
-            newTextBox("textBoxNodeName", node.Name, y + 20, false);
-
-            y += 50;
+            y += 10 + newLabel("labelNodeName", "Node: " + node.Name, y);
+            y += 10 + newLabel("labelNodeDescription", node.Comment, y, false);
             
             foreach (InputProperty prop in node.Properties)
             {
@@ -45,14 +44,23 @@ namespace Editor
             }
         }
 
-        private void newLabel(string name, string value, int pos)
+        private int newLabel(string name, string value, int pos, bool autoSize = true)
         {
             Label label = new Label();
             label.Name = name;
-            label.Text = value;
-            label.AutoSize = true;
             label.Top = pos;
+            label.AutoSize = autoSize;
+            label.Text = value;
+            if (!autoSize)
+            {
+                Size maxSize = new Size(188, 100);
+                
+                int h = TextRenderer.MeasureText(label.Text, label.Font, maxSize, TextFormatFlags.WordBreak).Height;
+                label.Size = new Size(188, h);
+            }
             Control.Controls.Add(label);
+
+            return label.Height;
         }
 
         private void newTextBox(string name, string value, int pos, bool enabled)

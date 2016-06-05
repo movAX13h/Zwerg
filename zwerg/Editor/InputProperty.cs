@@ -40,26 +40,39 @@ namespace Editor
             return label;
         }
 
-        protected TextBox CreateNumericTextBox(string name, string value, int posX, int posY, int width)
+        protected NumericUpDown CreateNumericTextBox(string name, decimal value, int posX, int posY, int width, int decimalPlaces = 4)
         {
-            TextBox txt = new TextBox();
-            txt.Name = "propertiesPanelTextBox" + name;
-            txt.Text = value;
+            //TextBox txt = new TextBox();
+            NumericUpDown txt = new NumericUpDown();
+            txt.Minimum = -9999;
+            txt.Maximum = 9999;
+            txt.Increment = decimalPlaces > 0 ? 0.1M : 1;
+            txt.DecimalPlaces = decimalPlaces;
+            txt.Name = "propertiesPanelNumericUpDown" + name;
+            txt.Value = value;
             txt.Left = posX;
             txt.Top = posY;
             txt.Width = width;
-            txt.GotFocus += txt_GotFocus;
+            //txt.GotFocus += txt_GotFocus;
             return txt;
         }
 
+        /*
         void txt_GotFocus(object sender, EventArgs e)
         {
-            ((TextBox)sender).SelectAll();
-        }
+            //((NumericUpDown)sender).SelectAll();
+        }*/
 
-        protected string[] ValuesFromString(string input)
+        protected decimal[] ValuesFromString(string input)
         {
-            return input.Split(',');
+            string[] values = input.Split(',');
+            decimal[] numbers = new decimal[values.Length];
+
+            for(int i = 0; i < values.Length; i++)
+            {
+                numbers[i] = decimal.Parse(values[i]);
+            }
+            return numbers;
         }
 
         public abstract int CreateControls(Control panel, int posY);

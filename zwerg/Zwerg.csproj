@@ -76,7 +76,9 @@
     <Compile Include="Core\Canvas.cs" />
     <Compile Include="Core\Shader.cs" />
     <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\HelperCode.cs" />
     <Compile Include="Editor\InputProperty.cs" />
+    <Compile Include="Editor\Inputs\InputInt.cs" />
     <Compile Include="Editor\Inputs\InputFloat.cs" />
     <Compile Include="Editor\Inputs\InputVec2.cs" />
     <Compile Include="Editor\Inputs\InputVec4.cs" />
@@ -125,7 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\log.txt" />
-    <Content Include="bin\Debug\nodes.xml">
+    <Content Include="bin\Debug\functions.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="bin\Debug\shader.fs" />

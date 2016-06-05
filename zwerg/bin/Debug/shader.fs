@@ -26,26 +26,18 @@ uniform vec2 mouseDownPos; // used for click selection
 uniform float focus;
 uniform float far;
 
+#define PI 3.14159265
+#define TAU (2*PI)
+#define PHI (sqrt(5)*0.5 + 0.5)
+
 #define SCENE
 #define FUNCTIONS
-
-#define pi2 6.283185307179586476925286766559
-
-vec2 rotate(vec2 p, float a)
-{
-	vec2 r;
-	float sa = sin(a), ca = cos(a);
-	r.x = p.x*ca - p.y*sa;
-	r.y = p.x*sa + p.y*ca;
-	return r;
-}
 
 #ifdef FUNCTIONS
 #endif
 
 float sdSun(vec3 p, float r)
 {
-	p.y *= 1.06;
 	return length(p) - r;
 }
 

@@ -24,18 +24,22 @@ namespace Editor
         }
         public string CodeMask { get; private set; }
         public string Code { get; private set; }
+        public string[] Requires { get; private set; }
+        public string Comment { get; private set; }
 
         public TreeNode TreeNode { get; private set; }
         public bool Enabled = true;
 
         public List<InputProperty> Properties { get; private set; }
 
-        public SceneNode(string type, string name, string codeMask, string code)
+        public SceneNode(string type, string name, string codeMask, string code, string[] requires, string comment)
         {
             this.name = name;
             Type = type;
             CodeMask = codeMask;
             Code = code;
+            Requires = requires;
+            Comment = comment;
 
             Properties = new List<InputProperty>();
 
@@ -110,6 +114,8 @@ namespace Editor
             Name = ori.Name;
             CodeMask = ori.CodeMask;
             Code = ori.Code;
+            Requires = ori.Requires;
+            Comment = ori.Comment;
             Properties = new List<InputProperty>();
             
             foreach(InputProperty prop in ori.Properties)

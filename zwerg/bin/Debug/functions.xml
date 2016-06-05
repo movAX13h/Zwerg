@@ -1,0 +1,731 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<functions>
+  <!-- 
+    Based on Mercury SDF library (version 2016-01-10) http://mercury.sexy/hg_sdf
+    Converted to XML and modified for usage in Zwerg by movAX13h.
+    
+    NOTES: Node function tags can have a 'requires' attribute to indicate code dependencies
+           (comma-separated 'name' of helper code or an other node)
+           
+           Zwerg outputs only required functions to shader code so everything
+           has to be connected properly.
+           
+           Helper functions are not displayed anywhere in Zwerg but added to the shader code
+           if a node is used that requires the specific function or define.
+           
+           Comments can be added using the 'comment' attribute.
+           
+           GDF functions that use the variable exponent variant are not included.
+  -->
+  
+  <helpers>
+    <!-- DEFINES -->
+    <code name="saturate" comment="Clamp to [0,1] - this operation is free under certain circumstances. For further information see http://www.humus.name/Articles/Persson_LowLevelThinking.pdf and http://www.humus.name/Articles/Persson_LowlevelShaderOptimization.pdf ">
+      #define saturate(x) clamp(x, 0, 1)
+    </code>
+  
+    <!-- HELPER FUNCTIONS -->
+    <code name="rot" comment="rotate vec2">
+      <![CDATA[vec2 rot(vec2 p, float a)
+    {
+    vec2 r;
+    float sa = sin(a), ca = cos(a);
+    r.x = p.x*ca - p.y*sa;
+    r.y = p.x*sa + p.y*ca;
+    return r;
+    }]]>
+    </code>
+    <code name="rot45" comment="rotate vec2 by 45 degrees">
+      <![CDATA[void rot45(inout vec2 p) { p = (p + vec2(p.y, -p.x))*sqrt(0.5); }]]>
+    </code>
+
+    <code name="rep1" comment="float repetition">
+      <![CDATA[float rep1(float p, float c) { return mod(p,c)-0.5*c; }]]>
+    </code>
+    <code name="rep2" comment="vec2 repetition">
+      <![CDATA[vec2 rep2(vec2 p, vec2 c) { return mod(p,c)-0.5*c; }]]>
+    </code>
+    <code name="rep3" comment="vec3 repetition">
+      <![CDATA[vec3 rep3(vec3 p, vec3 c) { return mod(p,c)-0.5*c; }]]>
+    </code>
+
+
+
+    <code name="sgnFloat" comment="Sign function that doesn't return 0">
+      <![CDATA[float sgn(float x) { return (x<0)?-1:1; }]]>
+    </code>
+    <code name="sgnVec2" comment="Sign function that doesn't return 0">
+      <![CDATA[vec2 sgn(vec2 v) {	return vec2((v.x<0)?-1:1, (v.y<0)?-1:1); }]]>
+    </code>
+
+    <code name="squareFloat">
+      float square (float x) { return x*x; }
+    </code>
+    <code name="squareVec2">
+      vec2 square (vec2 x) { return x*x; }
+    </code>
+    <code name="squareVec3">
+      vec3 square (vec3 x) { return x*x; }
+    </code>
+    <code name="lengthSqr">
+      float lengthSqr(vec3 x) { return dot(x, x); }
+    </code>
+        
+    <code name="vmaxVec2" comment="Maximum/minumum elements of a vector">
+      float vmax(vec2 v) { return max(v.x, v.y); }
+    </code>
+    <code name="vmaxVec3" comment="Maximum/minumum elements of a vector">
+      float vmax(vec3 v) { return max(max(v.x, v.y), v.z); }
+    </code>
+    <code name="vmaxVec4" comment="Maximum/minumum elements of a vector">
+      float vmax(vec4 v) { return max(max(v.x, v.y), max(v.z, v.w)); }
+    </code>
+    <code name="vminVec2" comment="Maximum/minumum elements of a vector">
+      float vmin(vec2 v) { return min(v.x, v.y); }
+    </code>
+    <code name="vminVec3" comment="Maximum/minumum elements of a vector">
+      float vmin(vec3 v) { return min(min(v.x, v.y), v.z); }
+    </code>
+    <code name="vminVec4" comment="Maximum/minumum elements of a vector">
+      float vmin(vec4 v) { return min(min(v.x, v.y), min(v.z, v.w)); }
+    </code>
+
+    <code name="GDFVectors" comment="">
+      const vec3 GDFVectors[19] = vec3[](
+      normalize(vec3(1, 0, 0)),
+      normalize(vec3(0, 1, 0)),
+      normalize(vec3(0, 0, 1)),
+
+      normalize(vec3(1, 1, 1 )),
+      normalize(vec3(-1, 1, 1)),
+      normalize(vec3(1, -1, 1)),
+      normalize(vec3(1, 1, -1)),
+
+      normalize(vec3(0, 1, PHI+1)),
+      normalize(vec3(0, -1, PHI+1)),
+      normalize(vec3(PHI+1, 0, 1)),
+      normalize(vec3(-PHI-1, 0, 1)),
+      normalize(vec3(1, PHI+1, 0)),
+      normalize(vec3(-1, PHI+1, 0)),
+
+      normalize(vec3(0, PHI, 1)),
+      normalize(vec3(0, -PHI, 1)),
+      normalize(vec3(1, 0, PHI)),
+      normalize(vec3(-1, 0, PHI)),
+      normalize(vec3(PHI, 1, 0)),
+      normalize(vec3(-PHI, 1, 0))
+      );
+    </code>
+  </helpers>
+    
+  <nodes>
+    <!-- DISTANCE OBJECTS -->
+    <node type="dp" name="fSphere" caption="Sphere" mask="fSphere({A}-vec3({0}),{1})">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fSphere(vec3 p, float r) { return length(p) - r; }]]>
+      </function>
+    </node>
+    <node type="dp" name="fPlane" caption="Plane" mask="fPlane({A}-vec3({0}),vec3({1}),{2})" comment="Plane with normal n (n is normalized) at some distance from the origin">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="normal" type="vec3" default="0.0,1.0,0.0" />
+        <property name="distance" type="float" default="0.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fPlane(vec3 p, vec3 n, float distanceFromOrigin) { return dot(p, n) + distanceFromOrigin; }]]>
+      </function>
+    </node>
+    <node type="dp" name="fBoxCheap" caption="Box (cheap)" mask="fBoxCheap({A}-vec3({0}),vec3({1}))" comment="distance to corners is overestimated">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="size" type="vec3" default="0.5,0.5,0.5" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="vmaxVec3">
+        <![CDATA[float fBoxCheap(vec3 p, vec3 b) { return vmax(abs(p) - b); }]]>
+      </function>
+    </node>    
+    <node type="dp" name="fBox" caption="Box" mask="fBox({A}-vec3({0}),vec3({1}))" comment="correct distance to corners">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="size" type="vec3" default="0.5,0.5,0.5" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="vmaxVec3">
+        <![CDATA[float fBox(vec3 p, vec3 b) {
+vec3 d = abs(p) - b;
+return length(max(d, vec3(0))) + vmax(min(d, vec3(0)));
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fCylinder" caption="Cylinder" mask="fCylinder({A}-vec3({0}),{1},{2})" comment="standing upright on the xz plane">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="height" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fCylinder(vec3 p, float r, float height) {
+float d = length(p.xz) - r;
+d = max(d, abs(p.y) - height);
+return d;
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fCapsule" caption="Capsule" mask="fCapsule({A}-vec3({0}),{1},{2})" comment="A Cylinder with round caps on both sides">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="corners" type="float" default="0.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fCapsule(vec3 p, float r, float c) {
+return mix(length(p.xz) - r, length(vec3(p.x, abs(p.y) - c, p.z)) - r, step(c, abs(p.y)));
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fCapsule" caption="Capsule AB" mask="fCapsule({A}-vec3({0}),vec3({1}),vec3({2}),{3})" comment="between two end points A and B">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="A" type="vec3" default="0.0,0.0,0.0" />
+        <property name="B" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fLineSegment">
+        <![CDATA[float fCapsule(vec3 p, vec3 a, vec3 b, float r) {
+return fLineSegment(p, a, b) - r;
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fLineSegment" caption="Line Segment" mask="fLineSegment({A}-vec3({0}),vec3({1}),vec3({2}))">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="A" type="vec3" default="0.0,0.0,0.0" />
+        <property name="B" type="vec3" default="0.0,0.0,0.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="saturate">
+        <![CDATA[float fLineSegment(vec3 p, vec3 a, vec3 b) {
+vec3 ab = b - a;
+float t = saturate(dot(p - a, ab) / dot(ab, ab));
+return length((ab*t + a) - p);
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fTorus" caption="Torus XZ" mask="fTorus({A}-vec3({0}),{1},{2})" comment="in the XZ-plane">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="smallRadius" type="float" default="0.0" />
+        <property name="largeRadius" type="float" default="0.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fTorus(vec3 p, float smallRadius, float largeRadius) {
+return length(vec2(length(p.xz) - largeRadius, p.y)) - smallRadius;
+}]]>
+      </function>
+    </node>    
+    <node type="dp" name="fCircle" caption="Circle" mask="fCircle({A}-vec3({0}),{1})" comment="A circle line. Can also be used to make a torus by subtracting the smaller radius of the torus.">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fCircle(vec3 p, float r) {
+float l = length(p.xz) - r;
+return length(vec2(p.y, l));
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fDisc" caption="Disc" mask="fDisc({A}-vec3({0}),{1})" comment="A circular disc with no thickness (i.e. a cylinder with no height). Subtract some value to make a flat disc with rounded edge.">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fDisc(vec3 p, float r) {
+float l = length(p.xz) - r;
+return l < 0 ? abs(p.y) : length(vec2(p.y, l));
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fHexagonCircumcircle" caption="Hexagon circumcircle" mask="fHexagonCircumcircle({A}-vec3({0}),vec2({1}))" comment="Hexagonal prism, circumcircle variant">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="size" type="vec2" default="0.5,0.5" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fHexagonCircumcircle(vec3 p, vec2 h) {
+vec3 q = abs(p);
+return max(q.y - h.y, max(q.x*sqrt(3)*0.5 + q.z*0.5, q.z) - h.x);
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fHexagonIncircle" caption="Hexagon incircle" mask="fHexagonIncircle({A}-vec3({0}),vec2({1}))" comment="Hexagonal prism, incircle variant">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="size" type="vec2" default="0.5,0.5" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fHexagonCircumcircle">
+        <![CDATA[float fHexagonIncircle(vec3 p, vec2 h) {
+return fHexagonCircumcircle(p, vec2(h.x*sqrt(3)*0.5, h.y));
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fCone" caption="Cone" mask="fCone({A}-vec3({0}),{1},{2})" comment="Cone with correct distances to tip and base circle. Y is up, 0 is in the middle of the base.">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="height" type="float" default="0.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function>
+        <![CDATA[float fCone(vec3 p, float radius, float height) {
+vec2 q = vec2(length(p.xz), p.y);
+vec2 tip = q - vec2(0, height);
+vec2 mantleDir = normalize(vec2(height, radius));
+float mantle = dot(tip, mantleDir);
+float d = max(mantle, -q.y);
+float projected = dot(tip, vec2(mantleDir.y, -mantleDir.x));
+
+if ((q.y > height) && (projected < 0)) {
+d = max(d, length(tip));
+}
+
+if ((q.x > radius) && (projected > length(vec2(height, radius)))) {
+d = max(d, length(q - vec2(radius, 0)));
+}
+return d;
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fGDF" caption="Generalized Distance Function" mask="fGDF({A}-vec3({0}),{1},{2},{3})" comment="Generalized Distance Function. Version with without exponent, creates objects with sharp edges and flat faces">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="0.5" />
+        <property name="begin" type="int" default="2" />
+        <property name="end" type="int" default="6" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="GDFVectors">
+        <![CDATA[float fGDF(vec3 p, float r, int begin, int end) {
+float d = 0;
+for (int i = begin; i <= end; ++i)
+d = max(d, abs(dot(p, GDFVectors[i])));
+return d - r;
+}]]>
+      </function>
+    </node>
+    <node type="dp" name="fOctahedron" caption="Octahedron (GDF)" mask="fOctahedron({A}-vec3({0}),{1})">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fGDF">
+        <![CDATA[float fOctahedron(vec3 p, float r) { return fGDF(p, r, 3, 6); }]]>
+      </function>
+    </node>
+    <node type="dp" name="fDodecahedron" caption="Dodecahedron (GDF)" mask="fDodecahedron({A}-vec3({0}),{1})">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fGDF">
+        <![CDATA[float fDodecahedron(vec3 p, float r) { return fGDF(p, r, 13, 18); }]]>
+      </function>
+    </node>
+    <node type="dp" name="fIcosahedron" caption="Icosahedron (GDF)" mask="fIcosahedron({A}-vec3({0}),{1})">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fGDF">
+        <![CDATA[float fIcosahedron(vec3 p, float r) { return fGDF(p, r, 3, 12); }]]>
+      </function>
+    </node>
+    <node type="dp" name="fTruncatedOctahedron" caption="Truncated Octahedron (GDF)" mask="fTruncatedOctahedron({A}-vec3({0}),{1})">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fGDF">
+        <![CDATA[float fTruncatedOctahedron(vec3 p, float r) { return fGDF(p, r, 0, 6); }]]>
+      </function>
+    </node>
+    <node type="dp" name="fTruncatedIcosahedron" caption="Truncated Icosahedron (GDF)" mask="fTruncatedIcosahedron({A}-vec3({0}),{1})">
+      <properties>
+        <property name="position" type="vec3" default="0.0,0.0,0.0" />
+        <property name="radius" type="float" default="1.0" />
+        <property name="color" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="fGDF">
+        <![CDATA[float fTruncatedIcosahedron(vec3 p, float r) { return fGDF(p, r, 3, 18); }]]>
+      </function>
+    </node>
+    
+    
+    <!-- DISTANCE OPERATIONS 
+         Note: Parameter 0 and 1 are always distances and must not be listed in the parameters tag.
+    -->
+    <node type="distop" name="fOpUnionChamfer" caption="Union Chamfer" mask="fOpUnionChamfer({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpUnionChamfer(float a, float b, float r) {
+return min(min(a, b), (a - r + b)*sqrt(0.5));
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpIntersectionChamfer" caption="Intersection Chamfer" mask="fOpIntersectionChamfer({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpIntersectionChamfer(float a, float b, float r) {
+return max(max(a, b), (a + r + b)*sqrt(0.5));
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpDifferenceChamfer" caption="Difference Chamfer" mask="fOpDifferenceChamfer({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function requires="fOpIntersectionChamfer">
+        <![CDATA[float fOpDifferenceChamfer (float a, float b, float r) {
+return fOpIntersectionChamfer(a, -b, r);
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpUnionRound" caption="Union Round" mask="fOpUnionRound({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpUnionRound(float a, float b, float r) {
+vec2 u = max(vec2(r - a,r - b), vec2(0));
+return max(r, min (a, b)) - length(u);
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpIntersectionRound" caption="Intersection Round" mask="fOpIntersectionRound({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpIntersectionRound(float a, float b, float r) {
+vec2 u = max(vec2(r + a,r + b), vec2(0));
+return min(-r, max (a, b)) + length(u);
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpDifferenceRound" caption="Difference Round" mask="fOpDifferenceRound({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function requires="fOpIntersectionRound">
+        <![CDATA[float fOpDifferenceRound (float a, float b, float r) {
+return fOpIntersectionRound(a, -b, r);
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpUnionColumns" caption="Union Columns" mask="fOpUnionColumns({0},{1},{2},{3})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+        <property name="n" type="float" default="0.0" />
+      </properties>
+      <function requires="rot45,repetition">
+        <![CDATA[float fOpUnionColumns(float a, float b, float r, float n) {
+if ((a < r) && (b < r)) {
+vec2 p = vec2(a, b);
+float columnradius = r*sqrt(2)/((n-1)*2+sqrt(2));
+rot45(p);
+p.x -= sqrt(2)/2*r;
+p.x += columnradius*sqrt(2);
+if (mod(n,2) == 1) {
+p.y += columnradius;
+}
+rep1(p.y, columnradius*2);
+float result = length(p) - columnradius;
+result = min(result, p.x);
+result = min(result, a);
+return min(result, b);
+} else {
+return min(a, b);
+}
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpDifferenceColumns" caption="Difference Columns" mask="fOpDifferenceColumns({0},{1},{2},{3})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+        <property name="n" type="float" default="0.0" />
+      </properties>
+      <function requires="rot45">
+        <![CDATA[float fOpDifferenceColumns(float a, float b, float r, float n) {
+a = -a;
+float m = min(a, b);
+if ((a < r) && (b < r)) {
+vec2 p = vec2(a, b);
+float columnradius = r*sqrt(2)/n/2.0;
+columnradius = r*sqrt(2)/((n-1)*2+sqrt(2));
+
+rot45(p);
+p.y += columnradius;
+p.x -= sqrt(2)/2*r;
+p.x += -columnradius*sqrt(2)/2;
+
+if (mod(n,2) == 1) {
+p.y += columnradius;
+}
+pMod1(p.y,columnradius*2);
+
+float result = -length(p) + columnradius;
+result = max(result, p.x);
+result = min(result, a);
+return -min(result, b);
+} else {
+return -m;
+}
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpIntersectionColumns" caption="Intersection Columns" mask="fOpIntersectionColumns({0},{1},{2},{3})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+        <property name="n" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpIntersectionColumns(float a, float b, float r, float n) { return fOpDifferenceColumns(a,-b,r, n); }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpUnionStairs" caption="Union Stairs" mask="fOpUnionStairs({0},{1},{2},{3})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+        <property name="n" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpUnionStairs(float a, float b, float r, float n) {
+float s = r/n;
+float u = b-r;
+return min(min(a,b), 0.5 * (u + a + abs ((mod (u - a + s, 2 * s)) - s)));
+}]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpIntersectionStairs" caption="Intersection Stairs" mask="fOpIntersectionStairs({0},{1},{2},{3})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+        <property name="n" type="float" default="0.0" />
+      </properties>
+      <function requires="fOpUnionStairs">
+        <![CDATA[float fOpIntersectionStairs(float a, float b, float r, float n) { return -fOpUnionStairs(-a, -b, r, n); }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpDifferenceStairs" caption="Difference Stairs" mask="fOpDifferenceStairs({0},{1},{2},{3})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+        <property name="n" type="float" default="0.0" />
+      </properties>
+      <function requires="fOpUnionStairs">
+        <![CDATA[float fOpDifferenceStairs(float a, float b, float r, float n) { return -fOpUnionStairs(-a, b, r, n); }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpUnionSoft" caption="Union Soft" mask="fOpUnionSoft({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpUnionSoft(float a, float b, float r) { float e = max(r - abs(a - b), 0); return min(a, b) - e*e*0.25/r; }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpPipe" caption="Pipe" mask="fOpPipe({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpPipe(float a, float b, float r) { return length(vec2(a, b)) - r; }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpEngrave" caption="Engrave" mask="fOpEngrave({0},{1},{2})">
+      <properties>
+        <property name="r" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpEngrave(float a, float b, float r) { return max(a, (a + r - abs(b))*sqrt(0.5)); }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpGroove" caption="Groove" mask="fOpGroove({0},{1},{2},{3})">
+      <properties>
+        <property name="ra" type="float" default="0.0" />
+        <property name="rb" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpGroove(float a, float b, float ra, float rb) { return max(a, min(a + ra, rb - abs(b))); }]]>
+      </function>
+    </node>
+    <node type="distop" name="fOpTongue" caption="Tongue" mask="fOpTongue({0},{1},{2},{3})">
+      <properties>
+        <property name="ra" type="float" default="0.0" />
+        <property name="rb" type="float" default="0.0" />
+      </properties>
+      <function>
+        <![CDATA[float fOpTongue(float a, float b, float ra, float rb) { return min(a, max(a - ra, abs(b) - rb)); }]]>
+      </function>
+    </node>
+
+    <node type="distop" name="subtraction" caption="Subtraction" mask="opS({0},{1})">
+      <function>
+        float opS(float d1, float d2) { return max(-d1,d2); }
+      </function>
+    </node>
+    <node type="distop" name="intersection" caption="Intersection" mask="opI({0},{1})">
+      <function>
+        float opI(float d1, float d2) { return max(d1,d2); }
+      </function>
+    </node>
+
+    <!-- DOMAIN OPERATIONS -->
+    <node type="domop" name="repetition-x" caption="Repetition X" mask="vec3 {B}={A}; {B}.x=rep1({B}.x-{0},{1})">
+      <properties>
+        <property name="shift" type="float" default="0.0" />
+        <property name="period" type="float" default="1.0" />
+      </properties>
+      <function requires="rep1"></function>
+    </node>
+    <node type="domop" name="repetition-y" caption="Repetition Y" mask="vec3 {B}={A}; {B}.y=rep1({B}.y-{0},{1})">
+      <properties>
+        <property name="shift" type="float" default="0.0" />
+        <property name="period" type="float" default="1.0" />
+      </properties>
+      <function requires="rep1"></function>
+    </node>
+    <node type="domop" name="repetition-z" caption="Repetition Z" mask="vec3 {B}={A}; {B}.z=rep1({B}.z-{0},{1})">
+      <properties>
+        <property name="shift" type="float" default="0.0" />
+        <property name="period" type="float" default="1.0" />
+      </properties>
+      <function requires="rep1"></function>
+    </node>
+
+    <node type="domop" name="repetition-xy" caption="Repetition XY" mask="vec3 {B}={A}; {B}.xy=rep2({B}.xy-vec2({0}),vec2({1}))">
+      <properties>
+        <property name="shift" type="vec2" default="0.0,0.0" />
+        <property name="period" type="vec2" default="1.2,1.2" />
+      </properties>
+      <function requires="rep2"></function>
+    </node>
+    <node type="domop" name="repetition-xz" caption="Repetition XZ" mask="vec3 {B}={A}; {B}.xz=rep2({B}.xz-vec2({0}),vec2({1}))">
+      <properties>
+        <property name="shift" type="vec2" default="0.0,0.0" />
+        <property name="period" type="vec2" default="1.2,1.2" />
+      </properties>
+      <function requires="rep2"></function>
+    </node>
+    <node type="domop" name="repetition-yz" caption="Repetition YZ" mask="vec3 {B}={A}; {B}.yz=rep2({B}.yz-vec2({0}),vec2({1}))">
+      <properties>
+        <property name="shift" type="vec2" default="0.0,0.0" />
+        <property name="period" type="vec2" default="1.2,1.2" />
+      </properties>
+      <function requires="rep2"></function>
+    </node>
+
+
+    <node type="domop" name="repetition-xyz" caption="Repetition XYZ" mask="vec3 {B}=rep3({A}-vec3({0}),vec3({1}))">
+      <properties>
+        <property name="shift" type="vec3" default="0.0,0.0,0.0" />
+        <property name="period" type="vec3" default="1.0,1.0,1.0" />
+      </properties>
+      <function requires="rep3"></function>
+    </node>
+    
+    <node type="domop" name="circular" caption="Circular X" mask="vec3 {B}={A}; {B}.yz=opRepCircular({B}.yz,{0})" comment="Circular domain. Does not repeat.">
+      <properties>
+        <property name="period" type="float" default="5.0" />
+      </properties>
+      <function>
+        vec2 opRepCircular(vec2 p, float period)
+        {
+        return vec3(atan(p.y,p.x)*period/TAU,length(p));
+        }
+      </function>
+    </node>
+    <node type="domop" name="circular-y" caption="Circular Y" mask="vec3 {B}={A}; {B}.xz=opRepCircular({B}.xz,{0})" comment="Circular domain. Does not repeat.">
+      <properties>
+        <property name="period" type="float" default="5.0" />
+      </properties>
+      <function requires="circular"></function>
+    </node>
+    <node type="domop" name="circular-z" caption="Circular Z" mask="vec3 {B}={A}; {B}.xy=opRepCircular({B}.xy,{0})" comment="Circular domain. Does not repeat.">
+      <properties>
+        <property name="period" type="float" default="5.0" />
+      </properties>
+      <function requires="circular"></function>
+    </node>
+    
+    <node type="domop" name="polar" caption="Polar X" mask="vec3 {B}={A}; {B}.yz=pModPolar({B}.yz,{0})">
+      <properties>
+        <property name="repetitions" type="float" default="5.0" />
+      </properties>
+      <function>
+        float pModPolar(vec2 p, float repetitions) {
+        float angle = 2*PI/repetitions;
+        float a = atan(p.y, p.x) + angle/2.;
+        float r = length(p);
+        a = mod(a,angle) - angle/2.;
+        p = vec2(cos(a), sin(a))*r;
+        return p;
+        }
+      </function>
+    </node>
+    <node type="domop" name="polar-y" caption="Polar Y" mask="vec3 {B}={A}; {B}.xz=pModPolar({B}.xz,{0})">
+      <properties>
+        <property name="repetitions" type="float" default="5.0" />
+      </properties>
+      <function requires="pModPolar"></function>
+    </node>
+    <node type="domop" name="polar-z" caption="Polar Z" mask="vec3 {B}={A}; {B}.xy=pModPolar({B}.xy,{0})">
+      <properties>
+        <property name="repetitions" type="float" default="5.0" />
+      </properties>
+      <function requires="pModPolar"></function>
+    </node>
+    
+    <node type="domop" name="rotation-x" caption="Rotation X" mask="vec3 {B}={A}; {B}.yz=rot({B}.yz, {0});">
+      <properties>
+        <property name="radian" type="float" default="0.7854" />
+      </properties>
+      <function requires="rot"></function>
+    </node>
+    <node type="domop" name="rotation-y" caption="Rotation Y" mask="vec3 {B}={A}; {B}.xz=rot({B}.xz, {0});">
+      <properties>
+        <property name="radian" type="float" default="0.7854" />
+      </properties>
+      <function requires="rot"></function>
+    </node>
+    <node type="domop" name="rotation-z" caption="Rotation Z" mask="vec3 {B}={A}; {B}.xy=rot({B}.xy, {0});">
+      <properties>
+        <property name="radian" type="float" default="0.7854" />
+      </properties>
+      <function requires="rot"></function>
+    </node>
+
+  </nodes>  
+</functions>
+
