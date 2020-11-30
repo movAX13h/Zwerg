@@ -2,9 +2,9 @@
 
 by movAX13h@thrill-project.com
 
-http://blog.thrill-project.com/zwerg-distance-field-editor/
+https://blog.thrill-project.com/zwerg-distance-field-editor/
 
-![ScreenShot](http://blog.thrill-project.com/wp-content/uploads/2014/10/screenshot.png)
+![ScreenShot](https://blog.thrill-project.com/wp-content/uploads/2014/10/screenshot.png)
 
 Feel free to fork and modify.
 
@@ -31,7 +31,7 @@ Feel free to fork and modify.
 - OpenGL via OpenTK (via NuGet)
 
 ## Download
-- Binary (v1.4.1) from author server: http://thrill-project.com/archiv/coding/Zwerg141.zip (3MB)
+- Binary (v1.4.1) from author server: https://thrill-project.com/archiv/coding/Zwerg141.zip (3MB)
 
 ## Features
 - distance functions (primitives)
@@ -47,10 +47,10 @@ Feel free to fork and modify.
 ## To do
 - better scene treeview
 - export shader code (remove all Zwerg specific code)
-- minimize output shader code (http://www.pouet.net/prod.php?which=55176)
+- minimize output shader code (https://www.pouet.net/prod.php?which=55176)
 - animation
 - materials
 
 ## Thanks
 - Shadertoy community, esp. iq
-- demoscene community (http://www.pouet.net)
+- demoscene community (https://www.pouet.net)
