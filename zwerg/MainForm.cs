@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 using Core;
-using Core.Assets;
 using Utils;
 using Editor;
 using Editor.Nodes;
 using System.IO;
 using System.Xml.Linq;
-using System.Text.RegularExpressions;
 using OpenTK.Graphics;
 
 namespace Zwerg
@@ -75,7 +69,7 @@ namespace Zwerg
 
             InitializeComponent();
 
-            Text = "Zwerg " + Application.ProductVersion.Substring(0, 3) + " - Distance Field Editor by movAX13h";
+            Text = "Zwerg " + Application.ProductVersion.Substring(0, 5) + " - Distance Field Editor by movAX13h";
 
             string nl = Environment.NewLine + Environment.NewLine;
             usageLabel.Text = "Use right mouse button context menu of the scene panel to add and remove nodes." + nl
@@ -218,15 +212,15 @@ namespace Zwerg
 
             string source = "";
 
-            //try
-            //{
+            try
+            {
                 source = editor.SceneToShaderCode();
-            //}
-            //catch(Exception e)
-            //{
-                //MessageBox.Show("Code generation failed: " + e.Message);
-              //  return;
-            //}
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Code generation failed: " + e.Message);
+                return;
+            }
 
             errorOutput.Text = editor.Errors;
             sourceOutput.Text = source;
@@ -294,16 +288,16 @@ namespace Zwerg
                 if (mouseLeftDown)
                 {
                     // rotate around origin
-                    camPos = Vector3.Transform(camPos, Matrix4.CreateFromAxisAngle(camSide, -mouseDelta.Y * lookSpeed));
-                    camPos = Vector3.Transform(camPos, Matrix4.CreateFromAxisAngle(Vector3.UnitY, -mouseDelta.X * lookSpeed));
+                    camPos = Vector3.Transform(camPos, Matrix3.CreateFromAxisAngle(camSide, -mouseDelta.Y * lookSpeed));
+                    camPos = Vector3.Transform(camPos, Matrix3.CreateFromAxisAngle(Vector3.UnitY, -mouseDelta.X * lookSpeed));
                 }
 
                 if (mouseWheelDelta != 0) camPos += mouseWheelDelta * camDir * moveSpeed;
 
                 if (keys.Contains(Keys.W)) camPos += camDir * moveSpeed;
                 if (keys.Contains(Keys.S)) camPos -= camDir * moveSpeed;
-                if (keys.Contains(Keys.A)) camPos = Vector3.Transform(camPos, Matrix4.CreateFromAxisAngle(Vector3.UnitY, -lookSpeed));
-                if (keys.Contains(Keys.D)) camPos = Vector3.Transform(camPos, Matrix4.CreateFromAxisAngle(Vector3.UnitY, lookSpeed));
+                if (keys.Contains(Keys.A)) camPos = Vector3.Transform(camPos, Matrix3.CreateFromAxisAngle(Vector3.UnitY, -lookSpeed));
+                if (keys.Contains(Keys.D)) camPos = Vector3.Transform(camPos, Matrix3.CreateFromAxisAngle(Vector3.UnitY, lookSpeed));
             }
             else // free - camera mode
             {
@@ -343,15 +337,15 @@ namespace Zwerg
 
                 if (mouseLeftDown)
                 {
-                    camTarget = Vector3.Transform(camTarget - camPos, Matrix4.CreateFromAxisAngle(camSide, -mouseDelta.Y * lookSpeed)) + camPos;
-                    camTarget = Vector3.Transform(camTarget - camPos, Matrix4.CreateFromAxisAngle(Vector3.UnitY, -mouseDelta.X * lookSpeed)) + camPos;
+                    camTarget = Vector3.Transform(camTarget - camPos, Matrix3.CreateFromAxisAngle(camSide, -mouseDelta.Y * lookSpeed)) + camPos;
+                    camTarget = Vector3.Transform(camTarget - camPos, Matrix3.CreateFromAxisAngle(Vector3.UnitY, -mouseDelta.X * lookSpeed)) + camPos;
                 }
             }
 
             // move light
             if (mouseRightDown)
             {
-                lightPos = Vector3.Transform(lightPos, Matrix4.CreateFromAxisAngle(Vector3.UnitY, mouseDelta.X * lookSpeed * 3.0f));
+                lightPos = Vector3.Transform(lightPos, Matrix3.CreateFromAxisAngle(Vector3.UnitY, mouseDelta.X * lookSpeed * 3.0f));
             }
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

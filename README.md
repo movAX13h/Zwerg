@@ -1,6 +1,6 @@
 # Zwerg - Distance Field Editor
 
-by movAX13h (filip.sound@gmail.com)
+by movAX13h@thrill-project.com
 
 http://blog.thrill-project.com/zwerg-distance-field-editor/
 
@@ -9,6 +9,9 @@ http://blog.thrill-project.com/zwerg-distance-field-editor/
 Feel free to fork and modify.
 
 ## Changelog
+
+- **1.4.1** - 2020-11-30
+  - updated OpenTK via NuGet, version 3.1 now
 
 - **1.4** - 2016-06-05
   - renamed nodes.xml to functions.xml (format extended), contains defines, helpers and all code nodes
@@ -24,11 +27,11 @@ Feel free to fork and modify.
 - **1.1** - 2014-06-10: mouse click selection of df objects + minor fixes
 
 ## Compiling
-- C# .NET4.5, VisualStudio 12 (2013) solution
-- OpenGL via OpenTK (find dlls in bin/Debug)
+- C# .NET4.5, VisualStudio 2019 solution
+- OpenGL via OpenTK (via NuGet)
 
 ## Download
-- Binary (v1.4) from author server: http://thrill-project.com/archiv/coding/Zwerg14.zip (760kb)
+- Binary (v1.4.1) from author server: http://thrill-project.com/archiv/coding/Zwerg141.zip (3MB)
 
 ## Features
 - distance functions (primitives)

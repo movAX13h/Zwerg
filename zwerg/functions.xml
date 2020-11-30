@@ -192,7 +192,7 @@ return mix(length(p.xz) - r, length(vec3(p.x, abs(p.y) - c, p.z)) - r, step(c, a
 }]]>
       </function>
     </node>
-    <node type="dp" name="fCapsule" caption="Capsule AB" mask="fCapsule({A}-vec3({0}),vec3({1}),vec3({2}),{3})" comment="between two end points A and B">
+    <node type="dp" name="fCapsuleAB" caption="Capsule AB" mask="fCapsuleAB({A}-vec3({0}),vec3({1}),vec3({2}),{3})" comment="between two end points A and B">
       <properties>
         <property name="position" type="vec3" default="0.0,0.0,0.0" />
         <property name="A" type="vec3" default="0.0,0.0,0.0" />
@@ -201,7 +201,7 @@ return mix(length(p.xz) - r, length(vec3(p.x, abs(p.y) - c, p.z)) - r, step(c, a
         <property name="color" type="vec3" default="1.0,1.0,1.0" />
       </properties>
       <function requires="fLineSegment">
-        <![CDATA[float fCapsule(vec3 p, vec3 a, vec3 b, float r) {
+        <![CDATA[float fCapsuleAB(vec3 p, vec3 a, vec3 b, float r) {
 return fLineSegment(p, a, b) - r;
 }]]>
       </function>

@@ -1,4 +1,4 @@
-// DistanceFieldEditor, raymarcher, May 2014, movAX13h, filip.sound@gmail.com
+// DistanceFieldEditor, raymarcher, May 2014, movAX13h@thrill-project.com
 
 uniform vec2 resolution;
 uniform float time;

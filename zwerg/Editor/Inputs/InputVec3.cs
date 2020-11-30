@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Editor;
 using System.Windows.Forms;
 
 namespace Editor.Inputs

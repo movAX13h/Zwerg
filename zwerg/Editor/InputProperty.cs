@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Windows.Forms;
 
 namespace Editor
 {
@@ -18,50 +15,33 @@ namespace Editor
             Value = value;
         }
 
-        /*
-        public XElement ToXElement()
-        {
-            return new XElement("property", 
-                new XAttribute("name", Name), 
-                new XAttribute("type", Type), 
-                new XAttribute("value", Value)
-                );
-        }*/
-
         public abstract InputProperty Clone();
 
         protected Label CreateLabel(string name, string value, int pos)
         {
-            Label label = new Label();
-            label.Name = "propertiesPanelLabel" + name;
-            label.Text = value;
-            label.AutoSize = true;
-            label.Top = pos;
-            return label;
+            Label control = new Label();
+            control.Name = "propertiesPanelLabel" + name;
+            control.Text = value;
+            control.AutoSize = true;
+            control.Top = pos;
+            return control;
         }
 
         protected NumericUpDown CreateNumericTextBox(string name, decimal value, int posX, int posY, int width, int decimalPlaces = 4)
         {
             //TextBox txt = new TextBox();
-            NumericUpDown txt = new NumericUpDown();
-            txt.Minimum = -9999;
-            txt.Maximum = 9999;
-            txt.Increment = decimalPlaces > 0 ? 0.1M : 1;
-            txt.DecimalPlaces = decimalPlaces;
-            txt.Name = "propertiesPanelNumericUpDown" + name;
-            txt.Value = value;
-            txt.Left = posX;
-            txt.Top = posY;
-            txt.Width = width;
-            //txt.GotFocus += txt_GotFocus;
-            return txt;
+            NumericUpDown control = new NumericUpDown();
+            control.Minimum = -9999;
+            control.Maximum = 9999;
+            control.Increment = decimalPlaces > 0 ? 0.1M : 1;
+            control.DecimalPlaces = decimalPlaces;
+            control.Name = "propertiesPanelNumericUpDown" + name;
+            control.Value = value;
+            control.Left = posX;
+            control.Top = posY;
+            control.Width = width;
+            return control;
         }
-
-        /*
-        void txt_GotFocus(object sender, EventArgs e)
-        {
-            //((NumericUpDown)sender).SelectAll();
-        }*/
 
         protected decimal[] ValuesFromString(string input)
         {
