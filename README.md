@@ -11,7 +11,7 @@ Feel free to fork and modify.
 ## Changelog
 
 - **1.4.1** - 2020-11-30
-  - updated OpenTK via NuGet, version 3.1 now
+  - updated OpenTK to version 3.1 via NuGet
 
 - **1.4** - 2016-06-05
   - renamed nodes.xml to functions.xml (format extended), contains defines, helpers and all code nodes
